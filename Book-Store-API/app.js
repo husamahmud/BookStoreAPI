@@ -3,9 +3,12 @@ const mongoose = require("mongoose");
 const app = express();
 
 const authorPath = require("./routes/author");
+const bookPath = require("./routes/book");
 
 // use the author path router to all requests starting with "/api/authors"
 app.use("/api/authors", authorPath);
+// use the book path router to all requests starting with "/api/books"
+app.use("/api/books", bookPath);
 
 // connect to MongoDB database
 mongoose

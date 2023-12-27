@@ -8,7 +8,7 @@ const logger = (req, res, next) => {
         const responseTime = endTime - startTime;
         const statusCode = res.statusCode;
 
-        console.log(`${startTime.toLocaleString()} ${method} ${url} ${statusCode} ${responseTime}ms`);
+        console.log(`${startTime.toLocaleString()}, ${method} ${url} ${statusCode} ${responseTime}ms`);
     });
 
     next();

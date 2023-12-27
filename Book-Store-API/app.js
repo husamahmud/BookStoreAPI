@@ -1,12 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const dotenv = require("dotenv");
 const {notFound, errorHandler} = require("./middlewares/errors");
-dotenv.config();
-
+const logger = require("./middlewares/logger");
 const authorPath = require("./routes/author");
 const bookPath = require("./routes/book");
+const dotenv = require("dotenv");
+dotenv.config();
+
+app.use(express.json());
+app.use(logger);
 
 // use the author path router to all requests starting with "/api/authors"
 app.use("/api/authors", authorPath);

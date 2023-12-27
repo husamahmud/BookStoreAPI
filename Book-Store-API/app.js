@@ -5,6 +5,7 @@ const {notFound, errorHandler} = require("./middlewares/errors");
 const logger = require("./middlewares/logger");
 const authorPath = require("./routes/author");
 const bookPath = require("./routes/book");
+const authPath = require("./routes/auth");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -15,6 +16,8 @@ app.use(logger);
 app.use("/api/authors", authorPath);
 // use the book path router to all requests starting with "/api/books"
 app.use("/api/books", bookPath);
+// use the auth path router to all requests starting with "/api/auth"
+app.use("/api/auth", authPath);
 
 // connect to MongoDB database
 mongoose

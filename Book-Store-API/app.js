@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 
 const authorPath = require("./routes/author");
 const bookPath = require("./routes/book");
@@ -12,7 +14,7 @@ app.use("/api/books", bookPath);
 
 // connect to MongoDB database
 mongoose
-    .connect("mongodb://localhost/BookStoreDB")
+    .connect(process.env.MONGO_URI)
     .catch((error) => console.error("MongoDB connection error:", error));
 
 // once the MongoDB connection is open, log a success message
@@ -25,7 +27,10 @@ mongoose.connection.on("error", (error) => {
     console.error("MongoDB connection error:", error);
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 // start the server and listen to the specific port
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+app.listen(PORT, (error) => {
+    if (error) console.error("Server start error:", error);
+    else console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});

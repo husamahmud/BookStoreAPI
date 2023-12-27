@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const dotenv = require("dotenv");
+const {notFound, errorHandler} = require("./middlewares/errors");
 dotenv.config();
 
 const authorPath = require("./routes/author");
@@ -29,8 +30,11 @@ mongoose.connection.on("error", (error) => {
 
 const PORT = process.env.PORT;
 
+// error handler middleware
+app.use(notFound);
+app.use(errorHandler);
+
 // start the server and listen to the specific port
 app.listen(PORT, (error) => {
-    if (error) console.error("Server start error:", error);
-    else console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    if (error) console.error("Server start error:", error); else console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });

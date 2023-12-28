@@ -7,7 +7,6 @@ router.use(express.json());
 const {
     Book, validateAddBook, validateUpdateBook
 } = require("../models/Book");
-const {Author} = require("../models/Author");
 
 /**
  * Get all authors

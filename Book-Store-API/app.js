@@ -6,18 +6,18 @@ const logger = require("./middlewares/logger");
 const authorPath = require("./routes/author");
 const bookPath = require("./routes/book");
 const authPath = require("./routes/auth");
+const usersPath = require("./routes/users");
 const dotenv = require("dotenv");
 dotenv.config();
 
 app.use(express.json());
 app.use(logger);
 
-// use the author path router to all requests starting with "/api/authors"
+// set up path routers for API endpoints
 app.use("/api/authors", authorPath);
-// use the book path router to all requests starting with "/api/books"
 app.use("/api/books", bookPath);
-// use the auth path router to all requests starting with "/api/auth"
 app.use("/api/auth", authPath);
+app.use("/api/users", usersPath);
 
 // connect to MongoDB database
 mongoose

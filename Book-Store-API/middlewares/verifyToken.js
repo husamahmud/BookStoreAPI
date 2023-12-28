@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-function verifyToken(req, res, next) {
+function authenticateToken(req, res, next) {
     const token = req.headers.token;
     if (!token) return res.status(401).json({error: "No token found"});
 
@@ -19,4 +19,27 @@ function verifyToken(req, res, next) {
     }
 }
 
-module.exports = verifyToken;
+function authorizeTokenAndPermissions(req, res, next) {
+    authenticateToken(req, res, () => {
+        if (req.user.id === req.params.id || req.user.isAdmin) {
+            next();
+        } else {
+            return res.status(403).json({message: "Access denied. You are not authorized to perform this action."});
+        }
+    });
+}
+
+function authorizeTokenAndAdmin(req, res, next) {
+    authenticateToken(req, res, () => {
+        if (req.user.isAdmin) {
+            next();
+        } else {
+            return res.status(403).json({message: "Access denied. You are not authorized to perform this action."});
+        }
+    });
+}
+
+module.exports = {
+    authorizeTokenAndPermissions,
+    authorizeTokenAndAdmin
+};

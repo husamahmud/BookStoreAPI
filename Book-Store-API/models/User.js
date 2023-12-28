@@ -24,7 +24,6 @@ function validateRegisterUser(obj) {
         username: Joi.string().trim().min(3).max(50).required(),
         email: Joi.string().email().lowercase().trim().required(),
         password: Joi.string().min(8).required(),
-        isAdmin: Joi.bool(),
     });
     return schema.validate(obj);
 }
@@ -42,7 +41,6 @@ function validateUpdateUser(obj) {
         username: Joi.string().trim().min(3).max(50),
         email: Joi.string().email().lowercase().trim(),
         password: Joi.string().min(8),
-        isAdmin: Joi.bool(),
     });
     return schema.validate(obj);
 }

@@ -40,10 +40,10 @@ router.post("/add", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     if (error) return res.status(400).json({error: error.details[0].message});
 
     const author = new Author({
-        name: req.body.name,
-        email: req.body.email,
-        books: req.body.books,
-        address: req.body.address,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        nationality: req.body.nationality,
+        image: req.body.image
     });
     const newAuthor = await author.save();
 
@@ -66,10 +66,10 @@ router.put("/update/:id", authorizeTokenAndAdmin, asyncHandler(async (req, res) 
 
     const updatedAuthor = await Author.findByIdAndUpdate(req.params.id, {
         $set: {
-            name: req.body.name,
-            email: req.body.email,
-            books: req.body.books,
-            address: req.body.address
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            nationality: req.body.nationality,
+            image: req.body.image
         }
     }, {new: true});
 

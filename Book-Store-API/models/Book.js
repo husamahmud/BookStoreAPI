@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const joi = require("joi");
+const Joi = require("joi");
 
 const bookSchema = new mongoose.Schema({
     title: {
@@ -10,8 +10,8 @@ const bookSchema = new mongoose.Schema({
         type: Date, trim: true
     }, description: {
         type: String, required: true, trim: true
-    }, section: {
-        type: String, required: true,
+    }, price: {
+        type: Number, required: true, min: 0,
     }, cover: {
         type: String,
         trim: true,
@@ -25,25 +25,23 @@ const bookSchema = new mongoose.Schema({
 const Book = mongoose.model("Book", bookSchema);
 
 function validateAddBook(obj) {
-    const schema = joi.object({
-        title: joi.string().trim().min(5).max(50).required(),
-        author: joi.string().trim().required(),
-        publication_date: joi.string().trim(),
-        description: joi.string().trim().required(),
-        section: joi.string().trim().required(),
-        cover: joi.string().valid("soft cover", "hard cover").required()
+    const schema = Joi.object({
+        title: Joi.string().trim().min(3).max(250).required(),
+        author: Joi.string().required(),
+        description: Joi.string().trim().min(5).required(),
+        price: Joi.number().min(0).required(),
+        cover: Joi.string().valid("soft cover", "hard cover").required(),
     });
     return schema.validate(obj);
 }
 
 function validateUpdateBook(obj) {
-    const schema = joi.object({
-        title: joi.string().trim(),
-        author: joi.string().trim(),
-        publication_date: joi.string().trim(),
-        description: joi.string().trim(),
-        section: joi.string().trim(),
-        cover: joi.string().valid("soft cover", "hard cover"),
+    const schema = Joi.object({
+        title: Joi.string().trim().min(3).max(250),
+        author: Joi.string(),
+        description: Joi.string().trim().min(5),
+        price: Joi.number().min(0),
+        cover: Joi.string().valid("soft cover", "hard cover"),
     });
     return schema.validate(obj);
 }

@@ -8,13 +8,23 @@ router.use(express.json());
 const {
     Book, validateAddBook, validateUpdateBook
 } = require("../models/Book");
+const {object} = require("joi");
 
 /**
  * Get all authors
  * @route Get /
  **/
 router.get("/", asyncHandler(async (req, res) => {
-    const booksList = await Book.find();
+    const {minPrice, maxPrice} = req.query;
+    const query = {};
+
+    if (minPrice !== undefined && !isNaN(minPrice))
+        query.price = {...query.price, $gte: Number(minPrice)};
+
+    if (maxPrice !== undefined && !isNaN(maxPrice))
+        query.price = {...query.price, $lt: Number(maxPrice)};
+
+    const booksList = await Book.find(query).populate("author", ["_id", "name", "email"]);
     res.status(200).json(booksList);
 }));
 

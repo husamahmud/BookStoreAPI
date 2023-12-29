@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
+const {authorizeTokenAndAdmin} = require("../middlewares/verifyToken");
 
 router.use(express.json());
 
@@ -31,7 +32,7 @@ router.get("/:id", asyncHandler(async (req, res) => {
  * Create a new book
  * @route POST /add
  **/
-router.post("/add", asyncHandler(async (req, res) => {
+router.post("/add", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const {error} = validateAddBook(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
@@ -55,7 +56,7 @@ router.post("/add", asyncHandler(async (req, res) => {
  * Update an existing book
  * @route PUT /update/:id
  **/
-router.put("/update/:id", asyncHandler(async (req, res) => {
+router.put("/update/:id", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const {error} = validateUpdateBook(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
@@ -83,7 +84,7 @@ router.put("/update/:id", asyncHandler(async (req, res) => {
  * Delete a book by ID
  * @route Delete /delete/:id
  **/
-router.delete("/delete/:id", asyncHandler(async (req, res) => {
+router.delete("/delete/:id", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const book = await Book.findById(req.params.id);
     if (book) {
         await Book.findByIdAndDelete(req.params.id);

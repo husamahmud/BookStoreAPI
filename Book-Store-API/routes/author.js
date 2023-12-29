@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
+const {authorizeTokenAndAdmin} = require("../middlewares/verifyToken");
 
 router.use(express.json());
 
@@ -34,7 +35,7 @@ router.get("/:id", asyncHandler(async (req, res) => {
  * Create a new author
  * @route POST /add
  **/
-router.post("/add", asyncHandler(async (req, res) => {
+router.post("/add", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const {error} = validateCreateAuthor(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
@@ -56,7 +57,7 @@ router.post("/add", asyncHandler(async (req, res) => {
  * Update an existing author
  * @route PUT /update/:id
  **/
-router.put("/update/:id", asyncHandler(async (req, res) => {
+router.put("/update/:id", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const {error} = validateUpdateAuthor(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
@@ -82,7 +83,7 @@ router.put("/update/:id", asyncHandler(async (req, res) => {
  * Delete an author by ID
  * @route Delete /delete/:id
  **/
-router.delete("/delete/:id", asyncHandler(async (req, res) => {
+router.delete("/delete/:id", authorizeTokenAndAdmin, asyncHandler(async (req, res) => {
     const author = await Author.findById(req.params.id);
     if (author) {
         await Author.findByIdAndDelete(req.params.id);

@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const app = express();
 const {notFound, errorHandler} = require("./middlewares/errors");
 const logger = require("./middlewares/logger");
@@ -7,6 +6,7 @@ const authorPath = require("./routes/author");
 const bookPath = require("./routes/book");
 const authPath = require("./routes/auth");
 const usersPath = require("./routes/users");
+const connectToDB = require("./config/db");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -19,20 +19,8 @@ app.use("/api/books", bookPath);
 app.use("/api/auth", authPath);
 app.use("/api/users", usersPath);
 
-// connect to MongoDB database
-mongoose
-    .connect(process.env.MONGO_URI)
-    .catch((error) => console.error("MongoDB connection error:", error));
-
-// once the MongoDB connection is open, log a success message
-mongoose.connection.once("open", () => {
-    console.log("Connected to MongoDB database");
-});
-
-// if there is an error in the MongoDB connection, log the error
-mongoose.connection.on("error", (error) => {
-    console.error("MongoDB connection error:", error);
-});
+// connect t database
+connectToDB();
 
 const PORT = process.env.PORT;
 

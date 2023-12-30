@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {registerUser, loginUser} = require("../controllers/authorController");
+const {registerUser, loginUser} = require("../controllers/authController");
 
 router.use(express.json());
 

@@ -4,9 +4,9 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
+const {User, validateChangePassword} = require("../models/User");
 
 router.use(express.json());
-const {User} = require("../models/User");
 
 const generateResetLink = asyncHandler(async (req, res) => {
     const user = await User.findOne({email: req.body.email});
@@ -47,6 +47,9 @@ const generateResetLink = asyncHandler(async (req, res) => {
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
+    const {error} = validateChangePassword(req.body.password);
+    if (error) return res.status(400).json({error: error.details[0].message});
+
     const user = await User.findById(req.params.userID);
     if (!user) return res.status(404).json({error: "User not found"});
 

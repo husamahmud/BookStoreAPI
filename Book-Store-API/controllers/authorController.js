@@ -1,62 +1,79 @@
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const {
-    User, validateRegisterUser, validateLoginUser
-} = require("../models/User");
+    Author,
+    validateCreateAuthor,
+    validateUpdateAuthor
+} = require("../models/Author");
 
 router.use(express.json());
 
+const getAllAuthors = asyncHandler(async (req, res) => {
+    const authorsList = await Author.find();
+    res.status(200).json(authorsList);
+});
 
-const registerUser = asyncHandler(async (req, res) => {
-    const {error} = validateRegisterUser(req.body);
+const getAuthorByID = asyncHandler(async (req, res) => {
+    const author = await Author.findById(req.params.id);
+    if (author) res.status(200).json(author);
+    else res.status(404).json({error: "Author not found"});
+});
+
+const createAuthor = asyncHandler(async (req, res) => {
+    const {error} = validateCreateAuthor(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
-    let user = await User.findOne({email: req.body.email});
-    if (user) return res.status(400).json({error: "This email is already registered"});
-
-    // generating a random salt and hashing the password with the salt
-    const salt = await bcrypt.genSalt(10);
-    req.body.password = await bcrypt.hash(req.body.password, salt);
-
-    user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        isAdmin: req.body.isAdmin,
+    const author = new Author({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        nationality: req.body.nationality,
+        image: req.body.image
     });
-
-    const newUser = await user.save();
-    const token = jwt.sign({
-        id: user._id, isAdmin: user.isAdmin
-    }, process.env.SECRET_KEY, {expiresIn: "30d"});
-    // include all properties of newUser._doc, except for the password
-    const {password, ...userDate} = newUser._doc;
+    const newAuthor = await author.save();
 
     res.status(201).json({
-        message: "User registered successfully", ...userDate, token
+        message: "Author addedd successfully",
+        data: newAuthor
     });
 });
 
-const loginUser = asyncHandler(async (req, res) => {
-    const {error} = validateLoginUser(req.body);
+const updateAuthor = asyncHandler(async (req, res) => {
+    const {error} = validateUpdateAuthor(req.body);
     if (error) return res.status(400).json({error: error.details[0].message});
 
-    let user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).json({error: "Invalid email or password"});
+    const author = await Author.findById(req.params.id);
+    if (!author) return res.status(404).json({error: "Author not found"});
 
-    const isPasswordMatch = await bcrypt.compare(req.body.password, user.password);
-    if (!isPasswordMatch) return res.status(400).json({error: "Invalid email or password"});
+    const updatedAuthor = await Author.findByIdAndUpdate(req.params.id, {
+        $set: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            nationality: req.body.nationality,
+            image: req.body.image
+        }
+    }, {new: true});
 
-    const token = jwt.sign({
-        id: user._id, isAdmin: user.isAdmin
-    }, process.env.SECRET_KEY, {expiresIn: "30d"});
-    const {password, ...userDate} = user._doc;
     res.status(200).json({
-        message: "User logged in successfully", ...userDate, token
+        message: "Author updated successfully",
+        data: updatedAuthor
     });
 });
 
-module.exports = {registerUser, loginUser};
+const deleteAuthor = asyncHandler(async (req, res) => {
+    const author = await Author.findById(req.params.id);
+    if (author) {
+        await Author.findByIdAndDelete(req.params.id);
+        res.status(200).json({message: "Author has been deleted"});
+    } else {
+        res.status(404).json({error: "Author not found"});
+    }
+});
+
+module.exports = {
+    getAllAuthors,
+    getAuthorByID,
+    createAuthor,
+    updateAuthor,
+    deleteAuthor
+};

@@ -6,9 +6,11 @@ const logger = require("./middlewares/logger");
 const routes = require("./routes");
 const connectToDB = require("./config/db");
 const path = require("path");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 dotenv.config();
 
+app.use(helmet());
 app.use(express.json());
 app.use(logger);
 app.use(express.static(path.join(__dirname, "images")));

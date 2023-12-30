@@ -5,11 +5,13 @@ const {notFound, errorHandler} = require("./middlewares/errors");
 const logger = require("./middlewares/logger");
 const routes = require("./routes");
 const connectToDB = require("./config/db");
+const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
 app.use(express.json());
 app.use(logger);
+app.use(express.static(path.join(__dirname, "images")));
 
 // set up path routers for API endpoints
 app.use("/api", routes);

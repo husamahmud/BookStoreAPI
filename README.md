@@ -58,7 +58,7 @@ The BookStoreAPI project provides the following features:
 
 To get started with the BookStoreAPI project, follow these steps:
 
-1. Clone the repository: `git clone <repository_url>`
+1. Clone the repository: `https://github.com/husamahmud/BookStoreAPI.git`
 2. Install the dependencies: `npm install`
 3. Set up the environment variables by creating a `.env` file based on the
    provided `.env.example` file.

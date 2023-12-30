@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
-
-router.use(express.json());
-
 const {
     Book,
     validateAddBook,
     validateUpdateBook
 } = require("../models/Book");
+
+router.use(express.json());
 
 const getAllBooks = asyncHandler(async (req, res) => {
     const {minPrice, maxPrice} = req.query;

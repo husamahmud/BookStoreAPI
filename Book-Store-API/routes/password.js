@@ -8,13 +8,13 @@ const {
 
 /**
  * Send reset password link
- * @route /rest-password-link
+ * @route POST /rest-password-link
  **/
 router.post("/rest-password-link", generateResetLink);
 
 /**
  * Reset the password
- * @route /rest-password-link/:userID/:token
+ * @route POST /rest-password-link/:userID/:token
  **/
 router.post("/rest-password-link/:userID/:token", resetPassword);
 

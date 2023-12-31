@@ -75,3 +75,7 @@ To get started with the BookStoreAPI project, follow these steps:
 
 Make sure you have MongoDB set up and running, and update the MongoDB connection
 URL in the `.env` file.
+
+## Author ✍️
+
+- Hüsam Mahmud <[husamahmud](https://github.com/husamahmud)>

@@ -29,30 +29,62 @@ This project utilizes the following dependencies:
 The BookStoreAPI project provides the following features:
 
 - User Management 👥:
-    - Get all users 📋
-    - Get a user by ID 🔍
-    - Create a new user ➕
-    - Update user details ✏️
-    - Delete a user 🗑️
-    - Assign admin privileges to a user 👑
-
+- Author Management ✍️:
 - Book Management 📖:
-    - Get all books 📚
-    - Get a book by ID 🔍
-    - Create a new book ➕
-    - Update book details ✏️
-    - Delete a book 🗑️
-
 - Authentication and Password Reset 🔐:
-    - User registration and login with JWT authentication 🚪
-    - Password reset functionality using email verification 📧
-    - Sending password reset links via Gmail service 📨
-
 - Photo Upload 🖼️:
-    - Upload and store user profile photos 📷
-
 - Seeding 🌱:
-    - Utilize a seeding function to import data from a JavaScript file 📥
+
+## Endpoints
+
+**Authentication**
+
+- Register a new user
+    - `POST` /api/auth/register
+- Login user
+    - `POST` /api/auth/login
+
+**Authors**
+
+- Get all authors
+    - `GET` /authors
+- Get a specific author by ID
+    - `GET` /authors/:id
+- Create a new author (admin only)
+    - `POST` /authors/add
+- Update an existing author (admin only)
+    - `PUT` /authors/update/:id
+- Delete an author by ID (admin only)
+    - `DELETE` /authors/delete/:id
+
+**Books**
+
+- Get all books
+    - `GET` /books
+- Get a specific book by ID
+    - `GET` /books/:id
+- Create a new book (admin only)
+    - `POST` /books/add
+- Update an existing book
+    - `PUT` /books/update/:id
+- Delete a book by ID (admin only)
+    - `DELETE` /books/delete/:id
+
+**Image Upload**
+
+- Upload image
+    - `POST` /upload
+
+**Users**
+
+- Update user
+    - `PUT` /users/:id
+- Get all users (admin only)
+    - `GET` /users
+- Get user by ID
+    - `GET` /users/:id
+- Delete user by ID
+    - `DELETE` /users/:id
 
 ## Getting Started 🚀
 
